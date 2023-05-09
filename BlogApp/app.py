@@ -1,15 +1,24 @@
-from flask import Flask, render_template
-from BlogApp.views.users import users_app
-from BlogApp.views.articles import articles_app
+from flask import Flask
 
-app.register_blueprint(users_app, url_prefix="/users")
-app.register_blueprint(articles_app, url_prefix="/articles")
+from BlogApp.articles.views import article
+from BlogApp.users.views import user
+from BlogApp.index.views import index
+from BlogApp.report.views import report
+
+VIEWS = [
+    index,
+    user,
+    article,
+    report
+]
 
 
-app = Flask(__name__)
+def create_app() -> Flask:
+    app = Flask(__name__)
+    register_blueprints(app)
+    return app
 
 
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html")
-
+def register_blueprints(app: Flask):
+    for view in VIEWS:
+        app.register_blueprint(view)
