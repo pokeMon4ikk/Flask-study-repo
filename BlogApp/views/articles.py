@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 
 articles_app = Blueprint("articles_app", __name__)
+
 ARTICLES = ["Flask", "Django", "JSON:API"]
 
 
