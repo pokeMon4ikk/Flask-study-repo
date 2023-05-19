@@ -9,6 +9,7 @@ from blog.views.auth import login_manager, auth_app
 from blog.models.database import db
 import os
 from flask_migrate import Migrate
+from blog.security import flask_bcrypt
 
 app = Flask(__name__)
 
@@ -22,6 +23,7 @@ app.config.from_object(f"blog.configs.{cfg_name}")
 
 migrate = Migrate(app, db, compare_type=True)
 
+flask_bcrypt.init_app(app)
 
 @app.route("/")
 def index():
@@ -81,6 +83,16 @@ def power_value():
 @app.route("/divide-by-zero/")
 def do_zero_division():
     return 1 / 0
+
+
+@app.cli.command("create-admin")
+def create_admin():
+    from blog.models import User
+    admin = User(username="admin", is_staff=True)
+    admin.password = os.environ.get("ADMIN_PASSWORD") or "adminpass"
+    db.session.add(admin)
+    db.session.commit()
+    print("created admin:", admin)
 
 
 @app.errorhandler(ZeroDivisionError)
