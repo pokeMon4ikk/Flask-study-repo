@@ -11,6 +11,7 @@ from blog.models.database import db
 import os
 from flask_migrate import Migrate
 from blog.security import flask_bcrypt
+from blog.models import Tag
 
 app = Flask(__name__)
 
@@ -25,6 +26,7 @@ app.config.from_object(f"blog.configs.{cfg_name}")
 migrate = Migrate(app, db, compare_type=True)
 
 flask_bcrypt.init_app(app)
+
 
 @app.route("/")
 def index():
@@ -101,6 +103,21 @@ def handle_zero_division_error(error):
     print(error)  # prints str version of error: 'division by zero'
     app.logger.exception("Here's traceback for zero division error")
     return "Never divide by zero!", 400
+
+
+@app.cli.command("create-tags")
+def create_tags():
+    for name in [
+        "flask",
+        "django",
+        "python",
+        "sqlalchemy",
+        "news",
+    ]:
+        tag = Tag(name=name)
+    db.session.add(tag)
+    db.session.commit()
+    print("created tags")
 
 
 app.register_blueprint(users_app, url_prefix="/users")
