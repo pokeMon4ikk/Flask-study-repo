@@ -1,13 +1,15 @@
-FROM python:3.9.1-buster
+FROM python:3.8-alpine
 
-WORKDIR /app
+COPY requirements.txt ./
+COPY config_template.json ./
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY wsgi.py wsgi.py
-COPY blog ./blog
+WORKDIR /usr/src/app
+COPY . .
 
-EXPOSE 5000
 
-CMD ["python", "wsgi.py"]
+EXPOSE 8000
+
+#CMD flask run -h 0.0.0.0 -p 8000
+CMD python run.py
