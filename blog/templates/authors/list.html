@@ -6,7 +6,7 @@
 {% block body %}
     <div class="row">
         <div class="col">
-            <h1>Authors:</h1>
+            <h1>Authors</h1>
             {% for author in authors %}
                 <ul>
                     <a href="{{ url_for('user.profile', pk=author.user.id) }}">
