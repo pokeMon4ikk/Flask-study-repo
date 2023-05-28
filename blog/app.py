@@ -2,6 +2,7 @@ from time import time
 from flask import Flask, render_template
 from werkzeug.exceptions import BadRequest
 from blog.views.articles import articles_app
+from blog.views.authors import authors_app
 from flask import request
 from flask import g
 from blog.views.users import users_app
@@ -103,8 +104,8 @@ def handle_zero_division_error(error):
 
 
 app.register_blueprint(users_app, url_prefix="/users")
-
 app.register_blueprint(articles_app, url_prefix="/articles")
+app.register_blueprint(authors_app, url_prefix="/authors")
 
 app.config["SECRET_KEY"] = "qwasaersdadafafafafaasdas"
 app.register_blueprint(auth_app, url_prefix="/")
