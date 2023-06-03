@@ -13,6 +13,8 @@ from flask_migrate import Migrate
 from blog.security import flask_bcrypt
 from blog.models import Tag
 from blog.admin import admin
+from blog.api import init_api
+
 
 app = Flask(__name__)
 
@@ -21,7 +23,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 admin.init_app(app)
-
+api = init_api(app)
 cfg_name = os.environ.get("CONFIG_NAME") or "DevConfig"
 app.config.from_object(f"blog.configs.{cfg_name}")
 
